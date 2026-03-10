@@ -1,0 +1,396 @@
+Recent Transactions  in this give code this part add delete button <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Manager - SpendWise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 font-inter antialiased">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <header class="sticky top-0 bg-white shadow-sm py-4 mb-8 z-10">
+            <div class="flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-gray-900">SpendWise</h1>
+                <div class="flex space-x-4">
+                    <button aria-label="Notifications" class="text-xl hover:text-indigo-600 transition-colors">🔔</button>
+                    <button aria-label="Settings" class="text-xl hover:text-indigo-600 transition-colors">⚙️</button>
+                    {% if 'username' in session %}
+                        <a href="{{ url_for('logout') }}" class="btn-secondary">Logout</a>
+                    {% else %}
+                        <a href="{{ url_for('signin') }}" class="btn-secondary">Sign In</a>
+                        <a href="{{ url_for('signup') }}" class="btn-primary">Sign Up</a>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="mb-4 p-4 rounded-lg {% if category == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Budget Alerts -->
+        {% if budget_alerts %}
+            <div class="mb-8">
+                {% for alert in budget_alerts %}
+                    <div class="p-4 bg-yellow-100 text-yellow-700 rounded-lg mb-2">{{ alert }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Overview Section -->
+        <section class="mb-8">
+            <div class="card bg-white p-6 rounded-xl shadow-sm">
+                <h2 class="text-3xl font-semibold text-gray-900 mb-2">${{ "%.2f" % total_balance }} <span class="text-base font-normal text-gray-500">Total Balance</span></h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-gray-100 p-4 rounded-lg text-center">
+                        <p class="text-sm text-gray-600">Total Income</p>
+                        <h3 class="text-lg font-semibold text-gray-900">${{ "%.2f" % total_income }}</h3>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg text-center">
+                        <p class="text-sm text-gray-600">Total Expenditure</p>
+                        <h3 class="text-lg font-semibold text-gray-900">${{ "%.2f" % total_expenditure }}</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Add Income Form -->
+        <section class="mb-8">
+            <div class="card bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Add New Income</h3>
+                <form action="{{ url_for('add_income') }}" method="POST" class="grid grid-cols-1 sm:grid-cols-5 gap-4">
+                    <input type="hidden" name="period" value="{{ period }}">
+                    <div>
+                        <label for="source" class="block text-sm text-gray-600 mb-1">Source</label>
+                        <input type="text" id="source" name="source" class="input-field" required>
+                    </div>
+                    <div>
+                        <label for="amount" class="block text-sm text-gray-600 mb-1">Amount ($)</label>
+                        <input type="number" id="amount" name="amount" step="0.01" min="0" class="input-field" required>
+                    </div>
+                    <div>
+                        <label for="date" class="block text-sm text-gray-600 mb-1">Date</label>
+                        <input type="date" id="date" name="date" class="input-field" required>
+                    </div>
+                    <div>
+                        <label for="is_recurring" class="block text-sm text-gray-600 mb-1">Recurring</label>
+                        <input type="checkbox" id="is_recurring" name="is_recurring" class="mr-2">
+                        <select name="recurrence_type" class="input-field">
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="recurrence_interval" class="block text-sm text-gray-600 mb-1">Interval</label>
+                        <input type="number" id="recurrence_interval" name="recurrence_interval" min="1" value="1" class="input-field">
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="btn-primary w-full">Add Income</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Add Expense Form -->
+        <section class="mb-8">
+            <div class="card bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Add New Expense</h3>
+                <form action="{{ url_for('add_expense') }}" method="POST" class="grid grid-cols-1 sm:grid-cols-5 gap-4">
+                    <input type="hidden" name="period" value="{{ period }}">
+                    <div>
+                        <label for="category" class="block text-sm text-gray-600 mb-1">Category</label>
+                        <select id="category" name="category" class="input-field" required>
+                            {% for cat in categories %}
+                                <option value="{{ cat }}">{{ cat }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="amount" class="block text-sm text-gray-600 mb-1">Amount ($)</label>
+                        <input type="number" id="amount" name="amount" step="0.01" min="0" class="input-field" required>
+                    </div>
+                    <div>
+                        <label for="date" class="block text-sm text-gray-600 mb-1">Date</label>
+                        <input type="date" id="date" name="date" class="input-field" required>
+                    </div>
+                    <div>
+                        <label for="is_recurring" class="block text-sm text-gray-600 mb-1">Recurring</label>
+                        <input type="checkbox" id="is_recurring" name="is_recurring" class="mr-2">
+                        <select name="recurrence_type" class="input-field">
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="recurrence_interval" class="block text-sm text-gray-600 mb-1">Interval</label>
+                        <input type="number" id="recurrence_interval" name="recurrence_interval" min="1" value="1" class="input-field">
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="btn-primary w-full">Add Expense</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Add Category Form -->
+        <section class="mb-8">
+            <div class="card bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Add New Category</h3>
+                <form action="{{ url_for('add_category') }}" method="POST" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="category" class="block text-sm text-gray-600 mb-1">Category Name</label>
+                        <input type="text" id="category" name="category" class="input-field" required>
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="btn-primary w-full">Add Category</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Set Budget Form -->
+        <section class="mb-8">
+            <div class="card bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Set Budget</h3>
+                <form action="{{ url_for('set_budget') }}" method="POST" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label for="category" class="block text-sm text-gray-600 mb-1">Category</label>
+                        <select id="category" name="category" class="input-field" required>
+                            {% for cat in categories %}
+                                <option value="{{ cat }}">{{ cat }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="budget_limit" class="block text-sm text-gray-600 mb-1">Budget Limit ($)</label>
+                        <input type="number" id="budget_limit" name="budget_limit" step="0.01" min="0" class="input-field" required>
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="btn-primary w-full">Set Budget</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Add Goal Form -->
+        <section class="mb-8">
+            <div class="card bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Set Financial Goal</h3>
+                <form action="{{ url_for('add_goal') }}" method="POST" class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                    <div>
+                        <label for="name" class="block text-sm text-gray-600 mb-1">Goal Name</label>
+                        <input type="text" id="name" name="name" class="input-field" required>
+                    </div>
+                    <div>
+                        <label for="target_amount" class="block text-sm text-gray-600 mb-1">Target Amount ($)</label>
+                        <input type="number" id="target_amount" name="target_amount" step="0.01" min="0" class="input-field" required>
+                    </div>
+                    <div>
+                        <label for="due_date" class="block text-sm text-gray-600 mb-1">Due Date</label>
+                        <input type="date" id="due_date" name="due_date" class="input-field" required>
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="btn-primary w-full">Add Goal</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Chart Section -->
+        <section class="mb-8">
+            <div class="card bg-white p-6 rounded-xl shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-semibold text-gray-900">Financial Overview</h3>
+                    <div class="chart-legend flex space-x-4">
+                        <span><span class="legend-dot bg-indigo-600"></span>Income</span>
+                        <span><span class="legend-dot bg-red-500"></span>Expenditure</span>
+                        <span><span class="legend-dot bg-gray-300"></span>Saving</span>
+                    </div>
+                </div>
+                <div style="height: 300px;">
+                    <canvas id="expenseChart" class="max-h-72 w-full"></canvas>
+                </div>
+                <div class="chart-controls flex justify-center space-x-2 mt-4">
+                    <a href="{{ url_for('dashboard', period='M') }}" class="chart-btn {% if period == 'M' %}active{% endif %}">M</a>
+                    <a href="{{ url_for('dashboard', period='D') }}" class="chart-btn {% if period == 'D' %}active{% endif %}">D</a>
+                    <a href="{{ url_for('dashboard', period='W') }}" class="chart-btn {% if period == 'W' %}active{% endif %}">W</a>
+                    <a href="{{ url_for('dashboard', period='Y') }}" class="chart-btn {% if period == 'Y' %}active{% endif %}">Y</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Transactions -->
+        <section class="mb-8">
+            <div class="card bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Recent Transactions</h3>
+                <div class="flex justify-end mb-4">
+                    <a href="{{ url_for('export_csv') }}" class="btn-secondary mr-2">Export CSV</a>
+                    <a href="{{ url_for('export_pdf') }}" class="btn-primary">Export PDF</a>
+                </div>
+                {% for inc in income %}
+                <div class="flex items-center justify-between py-3 border-b last:border-b-0 transition-colors hover:bg-gray-50">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-xl">💰</span>
+                        <div>
+                            <p class="text-gray-900 font-medium">{{ inc.source }}</p>
+                            <p class="text-sm text-gray-500">{{ inc.date }}</p>
+                        </div>
+                    </div>
+                    <p class="text-green-600 font-medium">+${{ "%.2f" % inc.amount|float }}</p>
+                </div>
+                {% endfor %}
+                {% for exp in expenses %}
+                <div class="flex items-center justify-between py-3 border-b last:border-b-0 transition-colors hover:bg-gray-50">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-xl">
+                            {% if exp.category == "House Bills" %}🏠
+                            {% elif exp.category == "Food & Drinks" %}🍴
+                            {% elif exp.category == "Travel" %}✈️
+                            {% elif exp.category == "Shopping" %}🛍️
+                            {% else %}💸
+                            {% endif %}
+                        </span>
+                        <div>
+                            <p class="text-gray-900 font-medium">{{ exp.category }}</p>
+                            <p class="text-sm text-gray-500">{{ exp.date }}</p>
+                        </div>
+                    </div>
+                    <p class="text-red-600 font-medium">-${{ "%.2f" % exp.amount|float }}</p>
+                </div>
+                {% endfor %}
+                {% if not expenses and not income %}
+                <p class="text-gray-500 text-center py-4">No transactions recorded yet.</p>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- Budgeting Section -->
+        <section class="mb-8">
+            <div class="card bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Budget Overview</h3>
+                {% for category, data in budget_data.items() %}
+                <div class="flex items-center justify-between py-3 border-b last:border-b-0 transition-colors hover:bg-gray-50">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-xl">
+                            {% if category == "House Bills" %}🏠
+                            {% elif category == "Food & Drinks" %}🍴
+                            {% elif category == "Travel" %}✈️
+                            {% elif category == "Shopping" %}🛍️
+                            {% else %}💸
+                            {% endif %}
+                        </span>
+                        <div class="flex-1">
+                            <p class="text-gray-900 font-medium">{{ category }}</p>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: {{ data.progress }}%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-gray-900 font-medium">${{ "%.2f" % data.spent }}</p>
+                        <p class="text-sm text-gray-500">Limit ${{ "%.2f" % data.budget_limit }}</p>
+                        <p class="text-sm text-gray-500">Left ${{ "%.2f" % data.left }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Goals Section -->
+        <section>
+            <div class="card bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Financial Goals</h3>
+                {% for goal in goals %}
+                <div class="flex items-center justify-between py-3 border-b last:border-b-0 transition-colors hover:bg-gray-50">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-xl">🎯</span>
+                        <div class="flex-1">
+                            <p class="text-gray-900 font-medium">{{ goal[1] }}</p>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: {{ (goal[3] / goal[2] * 100) if goal[2] else 0 }}%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-gray-900 font-medium">${{ "%.2f" % goal[3] }} / ${{ "%.2f" % goal[2] }}</p>
+                        <p class="text-sm text-gray-500">Due: {{ goal[4] }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+                {% if not goals %}
+                <p class="text-gray-500 text-center py-4">No goals set yet.</p>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('expenseChart').getContext('2d');
+        const chartData = {{ chart_data | safe }};
+        let chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: chartData.labels,
+                datasets: [
+                    {
+                        label: 'Income',
+                        data: chartData.income,
+                        backgroundColor: '#4f46e5',
+                        borderRadius: 6,
+                        barThickness: 20
+                    },
+                    {
+                        label: 'Expenditure',
+                        data: chartData.expenditure,
+                        backgroundColor: '#ef4444',
+                        borderRadius: 6,
+                        barThickness: 20
+                    },
+                    {
+                        label: 'Saving',
+                        data: chartData.saving,
+                        backgroundColor: '#d1d5db',
+                        borderRadius: 6,
+                        barThickness: 20
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        stacked: false,
+                        grid: { display: false },
+                        ticks: { font: { size: 12, family: 'Inter' } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#e5e7eb', drawBorder: false },
+                        ticks: { font: { size: 12, family: 'Inter' } }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    </script>
+</body>
+</html>    

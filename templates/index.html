@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpendWise - Manage Your Finances</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-gray-900">SpendWise</h1>
+            <div class="flex space-x-4">
+                <a href="{{ url_for('signin') }}" class="btn-secondary">Sign In</a>
+                <a href="{{ url_for('signup') }}" class="btn-primary">Get Started</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-20 bg-gradient-to-b from-gray-50 to-gray-100">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 fade-in">Take Control of Your Finances</h2>
+            <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto fade-in">SpendWise helps you track expenses, set budgets, and achieve financial freedom with ease and security.</p>
+            <a href="{{ url_for('signup') }}" class="btn-primary text-lg px-8 py-3 fade-in">Start Now</a>
+        </div>
+    </section>
+
+    <!-- Advantages Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <h3 class="text-3xl font-semibold text-gray-900 mb-12 text-center fade-in">Why Choose SpendWise?</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="card p-6 text-center fade-in">
+                    <span class="text-4xl mb-4 block">📊</span>
+                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Easy Tracking</h4>
+                    <p class="text-gray-600">Effortlessly log expenses and visualize your spending with intuitive charts.</p>
+                </div>
+                <div class="card p-6 text-center fade-in">
+                    <span class="text-4xl mb-4 block">💡</span>
+                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Smart Budgeting</h4>
+                    <p class="text-gray-600">Set custom budgets and get insights to stay on top of your finances.</p>
+                </div>
+                <div class="card p-6 text-center fade-in">
+                    <span class="text-4xl mb-4 block">📱</span>
+                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Anytime, Anywhere</h4>
+                    <p class="text-gray-600">Access your dashboard from any device, anytime, with seamless syncing.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Section -->
+    <section class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h3 class="text-3xl font-semibold text-gray-900 mb-12 text-center fade-in">Your Security, Our Priority</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="card p-6 fade-in">
+                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Data Encryption</h4>
+                    <p class="text-gray-600">Your financial data is protected with industry-standard encryption, keeping it safe from unauthorized access.</p>
+                </div>
+                <div class="card p-6 fade-in">
+                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Secure Authentication</h4>
+                    <p class="text-gray-600">Robust login systems ensure only you can access your account, with optional two-factor authentication.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reasons to Use Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h3 class="text-3xl font-semibold text-gray-900 mb-12 fade-in">Reasons to Start Today</h3>
+            <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto fade-in">SpendWise empowers you to make informed financial decisions, save more, and stress less. Join thousands of users who trust us to simplify their money management.</p>
+            <a href="{{ url_for('dashboard') }}" class="btn-primary text-lg px-8 py-3 fade-in">Join Now</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white py-8 border-t border-gray-200">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-600">© 2025 SpendWise. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

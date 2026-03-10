@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - SpendWise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen flex items-center justify-center py-12 px-4">
+        <div class="card p-8 max-w-md w-full">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Sign In to SpendWise</h2>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="mb-4 p-4 rounded-lg {% if category == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <form action="{{ url_for('signin') }}" method="POST">
+                <div class="mb-4">
+                    <label for="username" class="block text-sm text-gray-600 mb-1">Username</label>
+                    <input type="text" id="username" name="username" class="input-field" required>
+                </div>
+                <div class="mb-6">
+                    <label for="password" class="block text-sm text-gray-600 mb-1">Password</label>
+                    <input type="password" id="password" name="password" class="input-field" required>
+                </div>
+                <button type="submit" class="btn-primary w-full">Sign In</button>
+            </form>
+            <p class="mt-4 text-center text-gray-600">Don't have an account? <a href="{{ url_for('signup') }}" class="text-indigo-600 hover:underline">Sign Up</a></p>
+        </div>
+    </div>
+</body>
+</html>

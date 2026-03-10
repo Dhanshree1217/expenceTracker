@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blood Donation Campaign</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Blood Donation Campaign</h1>
+    <nav>
+      <a href="{{ url_for('index') }}">Home</a>
+      <a href="{{ url_for('register') }}">Register Donor</a>
+      <a href="{{ url_for('donate') }}">Donate</a>
+      <a href="{{ url_for('admin') }}">Admin</a>
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer>
+    <p>&copy; 2025 Blood Donation Campaign</p>
+  </footer>
+</body>
+</html>
