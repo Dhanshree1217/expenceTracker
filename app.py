@@ -324,6 +324,8 @@ def export_pdf():
         ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
         ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
         ('GRID', (0, 0), (-1, -1), 1, colors.black)
+         ('GRID', (0, 0), (-1, -1), 1, colors.black)
+        
     ]))
     elements.append(table)
     doc.build(elements)
