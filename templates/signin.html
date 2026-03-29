@@ -5,37 +5,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In - SpendWise</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
         body { font-family: 'Inter', sans-serif; }
+        .auth-panel { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4f46e5 100%); }
     </style>
 </head>
-<body class="bg-gray-50">
-    <div class="min-h-screen flex items-center justify-center py-12 px-4">
-        <div class="card p-8 max-w-md w-full">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Sign In to SpendWise</h2>
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="mb-4 p-4 rounded-lg {% if category == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
-                            {{ message }}
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm py-4 sticky top-0 z-50">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="/" class="flex items-center space-x-2">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold text-lg">S</div>
+                <span class="text-2xl font-bold text-gray-900">SpendWise</span>
+            </a>
+            <p class="text-gray-500 text-sm">Don't have an account? <a href="{{ url_for('signup') }}" class="text-indigo-600 font-semibold hover:underline">Sign Up</a></p>
+        </div>
+    </header>
+
+    <div class="min-h-[calc(100vh-72px)] flex">
+        <!-- Left illustration panel -->
+        <div class="hidden lg:flex flex-1 auth-panel relative overflow-hidden items-center justify-center p-12">
+            <div class="absolute inset-0">
+                <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=900&q=80" alt="Finance" class="w-full h-full object-cover opacity-10">
+            </div>
+            <div class="relative text-center max-w-md">
+                <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=500&q=80" alt="Dashboard preview" class="rounded-2xl shadow-2xl mb-8 border-4 border-white/20 w-full">
+                <h2 class="text-3xl font-extrabold text-white mb-4">Welcome Back!</h2>
+                <p class="text-indigo-200 text-lg">Sign in to continue managing your finances and tracking your goals.</p>
+                <div class="flex justify-center gap-6 mt-8">
+                    <div class="bg-white/15 rounded-xl px-5 py-3 text-center">
+                        <p class="text-2xl font-bold text-white">10K+</p>
+                        <p class="text-indigo-200 text-sm">Users</p>
+                    </div>
+                    <div class="bg-white/15 rounded-xl px-5 py-3 text-center">
+                        <p class="text-2xl font-bold text-white">$2M+</p>
+                        <p class="text-indigo-200 text-sm">Tracked</p>
+                    </div>
+                    <div class="bg-white/15 rounded-xl px-5 py-3 text-center">
+                        <p class="text-2xl font-bold text-white">4.9★</p>
+                        <p class="text-indigo-200 text-sm">Rating</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right form panel -->
+        <div class="flex-1 flex items-center justify-center py-12 px-6">
+            <div class="w-full max-w-md">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold text-3xl mx-auto mb-4">S</div>
+                    <h2 class="text-3xl font-extrabold text-gray-900">Sign In</h2>
+                    <p class="text-gray-500 mt-2">Enter your credentials to access your dashboard</p>
+                </div>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="mb-4 p-4 rounded-lg {% if category == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <div class="card p-8">
+                    <form action="{{ url_for('signin') }}" method="POST">
+                        <div class="mb-5">
+                            <label for="username" class="block text-sm font-medium text-gray-700 mb-1.5">Username</label>
+                            <input type="text" id="username" name="username" class="input-field" placeholder="Enter your username" required>
                         </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-            <form action="{{ url_for('signin') }}" method="POST">
-                <div class="mb-4">
-                    <label for="username" class="block text-sm text-gray-600 mb-1">Username</label>
-                    <input type="text" id="username" name="username" class="input-field" required>
+                        <div class="mb-6">
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+                            <input type="password" id="password" name="password" class="input-field" placeholder="Enter your password" required>
+                        </div>
+                        <button type="submit" class="btn-primary w-full text-base py-3">Sign In →</button>
+                    </form>
                 </div>
-                <div class="mb-6">
-                    <label for="password" class="block text-sm text-gray-600 mb-1">Password</label>
-                    <input type="password" id="password" name="password" class="input-field" required>
-                </div>
-                <button type="submit" class="btn-primary w-full">Sign In</button>
-            </form>
-            <p class="mt-4 text-center text-gray-600">Don't have an account? <a href="{{ url_for('signup') }}" class="text-indigo-600 hover:underline">Sign Up</a></p>
+
+                <p class="mt-6 text-center text-gray-500">Don't have an account? <a href="{{ url_for('signup') }}" class="text-indigo-600 font-semibold hover:underline">Create one free</a></p>
+            </div>
         </div>
     </div>
 </body>
