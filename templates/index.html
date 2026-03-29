@@ -5,18 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SpendWise - Manage Your Finances</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
     <style>
         body { font-family: 'Inter', sans-serif; }
+        .hero-bg { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4f46e5 100%); }
+        .hero-img { object-fit: cover; object-position: center; }
+        .feature-icon { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; }
+        .stat-card { background: rgba(255,255,255,0.12); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.2); }
     </style>
 </head>
 <body class="bg-gray-50">
     <!-- Header -->
-    <header class="bg-white shadow-sm py-4">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-gray-900">SpendWise</h1>
-            <div class="flex space-x-4">
+    <header class="bg-white shadow-sm py-4 sticky top-0 z-50">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold text-lg">S</div>
+                <h1 class="text-2xl font-bold text-gray-900">SpendWise</h1>
+            </div>
+            <div class="flex space-x-3">
                 <a href="{{ url_for('signin') }}" class="btn-secondary">Sign In</a>
                 <a href="{{ url_for('signup') }}" class="btn-primary">Get Started</a>
             </div>
@@ -24,68 +31,123 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="py-20 bg-gradient-to-b from-gray-50 to-gray-100">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 fade-in">Take Control of Your Finances</h2>
-            <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto fade-in">SpendWise helps you track expenses, set budgets, and achieve financial freedom with ease and security.</p>
-            <a href="{{ url_for('signup') }}" class="btn-primary text-lg px-8 py-3 fade-in">Start Now</a>
+    <section class="hero-bg relative overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1600&q=80" alt="Finance background" class="w-full h-full hero-img opacity-10">
+        </div>
+        <div class="relative container mx-auto px-6 py-24 flex flex-col md:flex-row items-center gap-12">
+            <div class="flex-1 text-center md:text-left">
+                <span class="inline-block bg-white/20 text-white text-sm font-medium px-4 py-1.5 rounded-full mb-6 fade-in">✨ Smart Finance Management</span>
+                <h2 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight fade-in">Take Control of<br><span class="text-indigo-300">Your Finances</span></h2>
+                <p class="text-lg text-indigo-100 mb-8 max-w-xl fade-in">SpendWise helps you track expenses, set budgets, and achieve financial freedom with ease and security.</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start fade-in">
+                    <a href="{{ url_for('signup') }}" class="btn-primary text-lg px-8 py-3">Start for Free</a>
+                    <a href="{{ url_for('signin') }}" class="bg-white/20 hover:bg-white/30 text-white border border-white/30 text-lg px-8 py-3 rounded-lg font-medium transition-all">Sign In</a>
+                </div>
+                <div class="flex gap-8 mt-10 justify-center md:justify-start fade-in">
+                    <div class="stat-card rounded-xl px-5 py-3 text-center">
+                        <p class="text-2xl font-bold text-white">10K+</p>
+                        <p class="text-indigo-200 text-sm">Users</p>
+                    </div>
+                    <div class="stat-card rounded-xl px-5 py-3 text-center">
+                        <p class="text-2xl font-bold text-white">$2M+</p>
+                        <p class="text-indigo-200 text-sm">Tracked</p>
+                    </div>
+                    <div class="stat-card rounded-xl px-5 py-3 text-center">
+                        <p class="text-2xl font-bold text-white">4.9★</p>
+                        <p class="text-indigo-200 text-sm">Rating</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-1 flex justify-center fade-in">
+                <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&q=80" alt="Finance dashboard" class="rounded-2xl shadow-2xl w-full max-w-md border-4 border-white/20">
+            </div>
         </div>
     </section>
 
     <!-- Advantages Section -->
-    <section class="py-16">
-        <div class="container mx-auto px-4">
-            <h3 class="text-3xl font-semibold text-gray-900 mb-12 text-center fade-in">Why Choose SpendWise?</h3>
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-14 fade-in">
+                <span class="text-indigo-600 font-semibold text-sm uppercase tracking-wider">Features</span>
+                <h3 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2">Why Choose SpendWise?</h3>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="card p-6 text-center fade-in">
-                    <span class="text-4xl mb-4 block">📊</span>
-                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Easy Tracking</h4>
-                    <p class="text-gray-600">Effortlessly log expenses and visualize your spending with intuitive charts.</p>
+                <div class="card p-8 text-center fade-in group">
+                    <div class="feature-icon bg-indigo-100 mx-auto mb-5">📊</div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-3">Easy Tracking</h4>
+                    <p class="text-gray-500">Effortlessly log expenses and visualize your spending with intuitive charts.</p>
                 </div>
-                <div class="card p-6 text-center fade-in">
-                    <span class="text-4xl mb-4 block">💡</span>
-                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Smart Budgeting</h4>
-                    <p class="text-gray-600">Set custom budgets and get insights to stay on top of your finances.</p>
+                <div class="card p-8 text-center fade-in group" style="background: linear-gradient(135deg,#4f46e5,#7c3aed); border-color: transparent;">
+                    <div class="feature-icon bg-white/20 mx-auto mb-5">💡</div>
+                    <h4 class="text-xl font-bold text-white mb-3">Smart Budgeting</h4>
+                    <p class="text-indigo-100">Set custom budgets and get insights to stay on top of your finances.</p>
                 </div>
-                <div class="card p-6 text-center fade-in">
-                    <span class="text-4xl mb-4 block">📱</span>
-                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Anytime, Anywhere</h4>
-                    <p class="text-gray-600">Access your dashboard from any device, anytime, with seamless syncing.</p>
+                <div class="card p-8 text-center fade-in group">
+                    <div class="feature-icon bg-purple-100 mx-auto mb-5">📱</div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-3">Anytime, Anywhere</h4>
+                    <p class="text-gray-500">Access your dashboard from any device, anytime, with seamless syncing.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Security Section -->
-    <section class="py-16 bg-gray-100">
-        <div class="container mx-auto px-4">
-            <h3 class="text-3xl font-semibold text-gray-900 mb-12 text-center fade-in">Your Security, Our Priority</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <div class="card p-6 fade-in">
-                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Data Encryption</h4>
-                    <p class="text-gray-600">Your financial data is protected with industry-standard encryption, keeping it safe from unauthorized access.</p>
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="flex-1 fade-in">
+                    <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=700&q=80" alt="Security" class="rounded-2xl shadow-xl w-full">
                 </div>
-                <div class="card p-6 fade-in">
-                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Secure Authentication</h4>
-                    <p class="text-gray-600">Robust login systems ensure only you can access your account, with optional two-factor authentication.</p>
+                <div class="flex-1 fade-in">
+                    <span class="text-indigo-600 font-semibold text-sm uppercase tracking-wider">Security</span>
+                    <h3 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2 mb-8">Your Security,<br>Our Priority</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center text-2xl flex-shrink-0">🔒</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-gray-900 mb-1">Data Encryption</h4>
+                                <p class="text-gray-500">Your financial data is protected with industry-standard encryption, keeping it safe from unauthorized access.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center text-2xl flex-shrink-0">🛡️</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-gray-900 mb-1">Secure Authentication</h4>
+                                <p class="text-gray-500">Robust login systems ensure only you can access your account, with optional two-factor authentication.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Reasons to Use Section -->
-    <section class="py-16">
-        <div class="container mx-auto px-4 text-center">
-            <h3 class="text-3xl font-semibold text-gray-900 mb-12 fade-in">Reasons to Start Today</h3>
-            <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto fade-in">SpendWise empowers you to make informed financial decisions, save more, and stress less. Join thousands of users who trust us to simplify their money management.</p>
-            <a href="{{ url_for('dashboard') }}" class="btn-primary text-lg px-8 py-3 fade-in">Join Now</a>
+    <!-- CTA Section -->
+    <section class="py-20 hero-bg relative overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1600&q=80" alt="CTA background" class="w-full h-full hero-img opacity-10">
+        </div>
+        <div class="relative container mx-auto px-6 text-center">
+            <h3 class="text-3xl md:text-5xl font-extrabold text-white mb-6 fade-in">Start Your Financial Journey Today</h3>
+            <p class="text-lg text-indigo-100 mb-10 max-w-2xl mx-auto fade-in">SpendWise empowers you to make informed financial decisions, save more, and stress less. Join thousands of users who trust us.</p>
+            <a href="{{ url_for('signup') }}" class="bg-white text-indigo-700 font-bold text-lg px-10 py-4 rounded-xl hover:bg-indigo-50 transition-all shadow-lg fade-in inline-block">Join Now — It's Free</a>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-white py-8 border-t border-gray-200">
-        <div class="container mx-auto px-4 text-center">
-            <p class="text-gray-600">© 2025 SpendWise. All rights reserved.</p>
+    <footer class="bg-gray-900 py-10">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold">S</div>
+                <span class="text-white font-bold text-lg">SpendWise</span>
+            </div>
+            <p class="text-gray-400 text-sm">© 2025 SpendWise. All rights reserved.</p>
+            <div class="flex space-x-6 text-gray-400 text-sm">
+                <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                <a href="#" class="hover:text-white transition-colors">Terms</a>
+                <a href="#" class="hover:text-white transition-colors">Contact</a>
+            </div>
         </div>
     </footer>
 </body>
