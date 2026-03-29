@@ -7,6 +7,20 @@ body {
     background: linear-gradient(180deg, #f7fafc 0%, #edf2f7 100%);
 }
 
+.auth-panel {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4f46e5 100%);
+}
+
+.feature-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+}
+
 .card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     background: white;
